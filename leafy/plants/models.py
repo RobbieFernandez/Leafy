@@ -14,7 +14,8 @@ class Plant(models.Model):
     name = models.CharField(max_length=512)
 
     watering_day = models.PositiveIntegerField(
-        choices=DayOfTheWeekchoices
+        choices=DayOfTheWeek.choices,
+        null=True
     )
 
     def __str__(self):

@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-# Create your views here.
+from plants.models import Plant
+
+class PlantCreate(CreateView):
+    model = Plant
+    fields = ['name', 'watering_day']
+
+
+class PlantUpdate(UpdateView):
+    model = Plant
+    fields = ['name', 'watering_day']
+
