@@ -1,2 +1,12 @@
 @charset "utf-8";
 @import "bulma";
+
+.main {
+display: flex;
+min-height: 100vh;
+flex-direction: column;
+}
+
+.section {
+    flex: 1;
+}

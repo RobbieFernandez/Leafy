@@ -18,10 +18,11 @@ from django.urls import path, include
 
 from plants import urls as plant_urls
 
-from .views import home_page
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('plants/', include(plant_urls)),
-    path('', home_page)
+    path('', views.log_in),
+    path('login', views.log_in),
 ]
