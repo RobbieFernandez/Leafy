@@ -124,6 +124,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(os.path.dirname(__file__), '../../static/js/dist'),
+    os.path.join(os.path.dirname(__file__), '../../static/icons'),
 ]
 
 STATIC_ROOT=os.path.join(os.path.dirname(__file__), '../../static/dist')
