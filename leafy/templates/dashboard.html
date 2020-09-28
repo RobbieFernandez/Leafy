@@ -1,1 +1,13 @@
 {% extends "base.html" %}
+
+{% block app %}
+<div id="react-container" class="react-container"></div>
+<script>
+    leafy.dashboard.DashboardApp.init(
+        {
+            getPlantsURL: "{% url "get-plants" %}",
+        },
+        document.getElementById('react-container')
+    );
+</script>
+{% endblock %}

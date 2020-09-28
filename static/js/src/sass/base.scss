@@ -1,5 +1,10 @@
 @charset "utf-8";
+
+$primary: rgb(100, 160, 130);
+
 @import "bulma";
+@import "./forms";
+@import "./icons";
 
 .main {
 display: flex;
@@ -10,3 +15,5 @@ flex-direction: column;
 .section {
     flex: 1;
 }
+
+

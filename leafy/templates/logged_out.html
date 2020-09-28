@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Leafy - Logged Out{% endblock title %}
+
+{% block app %}
+<div class='container has-text-centered'>
+    <h1 class="title">Logged Out</h1>
+    <h2 class="subtitle">You have been successfully logged out.</h2>
+    <a href="{% url "login" %}" class="button is-success">Log back in</a>
+</div>
+{% endblock app %}

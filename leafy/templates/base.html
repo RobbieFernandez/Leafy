@@ -6,10 +6,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Leafy{% endblock %}</title>
         <script src={% static "bundle.js" %}></script>
+        <script src="https://kit.fontawesome.com/64b017289f.js" crossorigin="anonymous"></script>
         {% block extra_head %}{% endblock %}
     </head>
     <body class='main'>
-        <nav class="navbar" role="navigation" aria-label="main navigation">
+        <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">
                     <img src="/static/full_logo.png" width="113" height="32">
@@ -28,9 +29,9 @@
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="buttons">
-                            <a class="button is-primary">
-                                Log in
-                            </a>
+                            {% if user.is_authenticated %}
+                            <a class="button is-primary" href="{% url "logout" %}">Log Out</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
