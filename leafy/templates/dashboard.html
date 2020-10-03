@@ -5,7 +5,8 @@
 <script>
     leafy.dashboard.DashboardApp.init(
         {
-            getPlantsURL: "{% url "get-plants" %}",
+            getPlantsUrl: "{% url "get-plants" %}",
+            waterPlantsUrl: "{% url "water-plant" %}",
         },
         document.getElementById('react-container')
     );

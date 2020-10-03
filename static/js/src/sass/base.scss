@@ -5,6 +5,7 @@ $primary: rgb(100, 160, 130);
 @import "bulma";
 @import "./forms";
 @import "./icons";
+@import "./colours";
 
 .main {
 display: flex;
@@ -15,5 +16,3 @@ flex-direction: column;
 .section {
     flex: 1;
 }
-
-

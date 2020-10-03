@@ -1,0 +1,5 @@
+@use "sass:color";
+
+.disabled-overlay {
+    background-color: color.adjust($black, $alpha: -0.9);
+}
