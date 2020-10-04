@@ -26,7 +26,7 @@ SECRET_KEY = '&=9mzx%benre*_gl+1#sf_m7uc6@c#4r5y))g9232io$ulgipk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "10.1.1.160"]
+ALLOWED_HOSTS = ["*"]
 
 LOGOUT_REDIRECT_URL = 'plant-dashbaord'
 LOGIN_URL = 'login'

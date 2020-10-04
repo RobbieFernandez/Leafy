@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 import ReactDOM, { render } from 'react-dom';
 
 import PlantTile from './PlantTile';
+import { LoadingOverlay } from './LoadingOverlay';
 
 export default class DashboardApp extends React.Component {
   constructor(props) {
@@ -26,9 +27,15 @@ export default class DashboardApp extends React.Component {
       .catch(() => this.setState({loadingPlants: false}));
   }
 
+  onPlantWatered = (plantId) => {
+    const plantIndex = this.state.plants.findIndex(plant => plant.get('id') === plantId);
+    const plant = this.state.plants.get(plantIndex).set("last_watered", new Date(Date.now()).toISOString());
+    this.setState({plants: this.state.plants.set(plantIndex, plant)});
+  }
+
   render = () => {
     if (this.state.loadingPlants) {
-      return <div/>; // TODO
+      return <LoadingOverlay/>
     } else {
       return <div className='container'>
         <div className="tile is-ancestor">
@@ -38,6 +45,8 @@ export default class DashboardApp extends React.Component {
               key={plant.get('id')}
               id={plant.get('id')}
               waterUrl={this.props.waterPlantsUrl}
+              lastWatered={plant.get('last_watered')}
+              onPlantWatered={this.onPlantWatered}
             />
           )}
         </div>

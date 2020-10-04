@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import JSONParser
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.db.models import Subquery, OuterRef
+from toolz import update_in
 import pytz
 
 from .models import Plant, WateredEvent
@@ -21,8 +23,23 @@ def get_plants(request):
     page_start = (page_number - 1) * page_size
     page_end = page_start + page_size
 
+    plant_queryset = Plant.objects.annotate(
+        last_watered=Subquery(
+            WateredEvent.objects.filter(
+                plant_id=OuterRef('id')
+            ).values_list('watered_on').order_by('-watered_on')[:1]
+        )
+    ).values('name', 'id', 'last_watered')
+
+    def format_row(plant_row):
+        return update_in(
+            plant_row,
+            ['last_watered'],
+            lambda d: d.strftime(DATE_FORMAT) if d is not None else None
+        )
+
     return JsonResponse({
-        "plants": list(Plant.objects.filter(owner=request.user).values('name', 'id'))[page_start:page_end]
+        "plants": [format_row(p) for p in plant_queryset[page_start:page_end]]
     })
 
 
