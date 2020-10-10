@@ -1,7 +1,30 @@
 import React from 'react';
 import {LoadingOverlay} from './LoadingOverlay';
 
-export default class PlantTile extends React.Component {
+interface plantTileProps {
+  lastWatered: string|null;
+  id: number;
+  waterUrl: string;
+  onPlantWatered: ((id: number) => any)|null;
+  greenTagThreshold: number;
+  yellowTagThreshold: number;
+  plantName: string;
+}
+
+interface plantTileState {
+  isUpdating: boolean;
+  lastWatered: string|null;
+}
+
+declare const csrftoken: string;
+
+export default class PlantTile extends React.Component<plantTileProps, plantTileState> {
+  static defaultProps = {
+    onPlantWatered: null,
+    greenTagThreshold: 3,
+    yellowTagThreshold: 10
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -81,8 +104,12 @@ export default class PlantTile extends React.Component {
             </div>
           </div>
           <div className="card-footer">
-            <div className="card-footer-item is-unselectable has-text-light">
-              <a onClick={this.water}>Water Now</a>
+            <div className="card-footer-item">
+              {
+                (lastWateredDays > 0 || isNaN(lastWateredDays)) ?
+                  <a onClick={this.water}>Water Now</a> :
+                  <p className="has-text-grey">Water Now</p>
+              }
             </div>
           </div>
           {this.state.isUpdating && <LoadingOverlay />}
@@ -91,9 +118,3 @@ export default class PlantTile extends React.Component {
     </div>
   }
 }
-
-PlantTile.defaultProps = {
-  onPlantWatered: null,
-  greenTagThreshold: 3,
-  yellowTagThreshold: 10
-};

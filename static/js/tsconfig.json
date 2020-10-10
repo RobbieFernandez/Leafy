@@ -1,0 +1,9 @@
+{
+    "extends": "@tsconfig/recommended/tsconfig.json",
+    "include": ["src/**/*"],
+    "baseUrl": "node_modules",
+    "compilerOptions": {
+      "jsx": "react",
+      "noImplicitAny": false
+    }
+  }

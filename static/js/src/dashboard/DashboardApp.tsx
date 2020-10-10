@@ -1,12 +1,22 @@
 import React from 'react';
 import Immutable from 'immutable';
-import ReactDOM, { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 
 import PlantTile from './PlantTile';
 import { LoadingOverlay } from './LoadingOverlay';
 
-export default class DashboardApp extends React.Component {
-  constructor(props) {
+interface dashboardState {
+  plants: Immutable.List<Immutable.Map<string, any>>;
+  loadingPlants: boolean;
+}
+
+interface dashboardProps {
+  getPlantsUrl: string;
+  waterPlantsUrl: string;
+}
+
+export default class DashboardApp extends React.Component<dashboardProps, dashboardState> {
+  constructor(props: Readonly<dashboardProps>) {
     super(props);
     this.state = {
       plants: Immutable.List(),
@@ -27,10 +37,17 @@ export default class DashboardApp extends React.Component {
       .catch(() => this.setState({loadingPlants: false}));
   }
 
-  onPlantWatered = (plantId) => {
+  onPlantWatered = (plantId: number) => {
     const plantIndex = this.state.plants.findIndex(plant => plant.get('id') === plantId);
-    const plant = this.state.plants.get(plantIndex).set("last_watered", new Date(Date.now()).toISOString());
-    this.setState({plants: this.state.plants.set(plantIndex, plant)});
+    const plant = this.state.plants.get(plantIndex);
+    if (plant !== undefined) {
+      this.setState({
+        plants: this.state.plants.set(
+          plantIndex,
+          plant.set("last_watered", new Date(Date.now()).toISOString())
+        )
+      });
+    }
   }
 
   render = () => {
@@ -55,6 +72,6 @@ export default class DashboardApp extends React.Component {
   }
 }
 
-export const init = (props, container) => {
+export const init = (props: Readonly<dashboardProps>, container) => {
   ReactDOM.render(<DashboardApp {...props}/>, container);
 }

@@ -1,3 +1,23 @@
+var babelLoader = {
+  loader: 'babel-loader',
+  options: {
+    presets: [
+      "@babel/preset-env",
+      "@babel/preset-react",
+    ],
+    plugins: [
+      "@babel/plugin-proposal-class-properties",
+    ],
+  }
+}
+
+var tsLoader = {
+  loader: 'ts-loader',
+  options: {
+    configFile: 'tsconfig.json',
+  }
+}
+
 module.exports = {
     entry: './src/app.js',
     mode: 'development',
@@ -6,18 +26,12 @@ module.exports = {
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              "presets": [
-                "@babel/preset-env",
-                "@babel/preset-react"
-              ],
-              "plugins": [
-                "@babel/plugin-proposal-class-properties",
-              ]
-            }
-          }
+          use: babelLoader
+        },
+        {
+          test: /\.(ts|tsx)$/,
+          exclude: /node_modules/,
+          use: [babelLoader, tsLoader]
         },
         {
             test: /\.s[ac]ss$/i,
@@ -33,7 +47,7 @@ module.exports = {
       ]
     },
     resolve: {
-      extensions: ['*', '.js', '.jsx', '.scss']
+      extensions: ['*', '.js', '.jsx', '.scss', '.tsx', '.ts']
     },
     output: {
       library: 'leafy',
