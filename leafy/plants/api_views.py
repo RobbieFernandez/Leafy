@@ -29,6 +29,8 @@ def get_plants(request):
                 plant_id=OuterRef('id')
             ).values_list('watered_on').order_by('-watered_on')[:1]
         )
+    ).filter(
+        owner=request.user
     ).values('name', 'id', 'last_watered')
 
     def format_row(plant_row):
