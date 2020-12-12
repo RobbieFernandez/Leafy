@@ -3,11 +3,14 @@ import Immutable from 'immutable';
 import ReactDOM from 'react-dom';
 
 import PlantTile from './PlantTile';
-import { LoadingOverlay } from './LoadingOverlay';
+import { LoadingOverlay } from '../layout/LoadingOverlay';
+import { Modal } from '../layout/Modal';
+import PlantEditForm from './PlantEditForm';
 
 interface dashboardState {
   plants: Immutable.List<Immutable.Map<string, any>>;
   loadingPlants: boolean;
+  editingPlant: number|null;
 }
 
 interface dashboardProps {
@@ -15,12 +18,15 @@ interface dashboardProps {
   waterPlantsUrl: string;
 }
 
+declare const Urls: any;
+
 export default class DashboardApp extends React.Component<dashboardProps, dashboardState> {
   constructor(props: Readonly<dashboardProps>) {
     super(props);
     this.state = {
       plants: Immutable.List(),
       loadingPlants: false,
+      editingPlant: null
     };
   }
 
@@ -50,24 +56,48 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
     }
   }
 
+  editPlant = (plantId: number) => {
+    this.setState({editingPlant: plantId});
+  }
+
+  onPlantEdited = (plantId: number) => {
+    this.setState({editingPlant: null});
+    this.fetchPlants();
+  }
+
   render = () => {
     if (this.state.loadingPlants) {
       return <LoadingOverlay/>
     } else {
-      return <div className='container'>
-        <div className="tile is-ancestor">
-          {this.state.plants.map(plant =>
-            <PlantTile
-              plantName={plant.get('name')}
-              key={plant.get('id')}
-              id={plant.get('id')}
-              waterUrl={this.props.waterPlantsUrl}
-              lastWatered={plant.get('last_watered')}
-              onPlantWatered={this.onPlantWatered}
-            />
-          )}
+      return <>
+        <Modal
+          close={() => {this.setState({editingPlant: null})}}
+          title={"Edit Plant"}
+          isOpen={this.state.editingPlant !== null}
+        >
+          {this.state.editingPlant !== null && <PlantEditForm
+            plantId={this.state.editingPlant}
+            submitUrl={Urls.plantUpdate(this.state.editingPlant)}
+            updateMethod={"PUT"}
+            onSubmit={this.onPlantEdited}
+          />}
+        </Modal>
+        <div className='container'>
+          <div className="tile is-ancestor">
+            {this.state.plants.map(plant =>
+              <PlantTile
+                plantName={plant.get('name')}
+                key={plant.get('id')}
+                id={plant.get('id')}
+                waterUrl={this.props.waterPlantsUrl}
+                lastWatered={plant.get('last_watered')}
+                onPlantWatered={this.onPlantWatered}
+                onEdit={this.editPlant}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </>
     }
   }
 }

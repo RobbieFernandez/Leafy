@@ -18,11 +18,13 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from django.views.generic.base import RedirectView
 from django.conf import settings
+from django_js_reverse.views import urls_js
 
 from plants import urls as plant_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('jsreverse/', urls_js, name='js_reverse'),
     path('plants/', include(plant_urls)),
     path('', RedirectView.as_view(pattern_name=settings.LOGOUT_REDIRECT_URL)),
     path('login', auth_views.LoginView.as_view(template_name="login.html"), name="login"),

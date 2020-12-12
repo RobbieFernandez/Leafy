@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'plants',
+    'django_js_reverse'
 ]
 
 MIDDLEWARE = [

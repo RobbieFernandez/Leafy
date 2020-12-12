@@ -10,6 +10,7 @@ from toolz import update_in
 import pytz
 
 from .models import Plant, WateredEvent
+from .serializers import PlantSerializer
 
 DEFAULT_PLANT_PAGE_SIZE = 20
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%S"
@@ -62,3 +63,37 @@ def water_plant(request):
     WateredEvent.objects.create(plant=plant, watered_on=watered_on, watered_by=request.user)
 
     return JsonResponse({"message": "success"})
+
+
+@decorators.permission_classes([IsAuthenticated])
+@decorators.api_view(['GET'])
+def plant_details(request, plant_id):
+    plant = get_object_or_404(Plant, id=plant_id)
+    return JsonResponse(PlantSerializer(plant).data)
+
+
+@decorators.permission_classes([IsAuthenticated])
+@decorators.parser_classes([JSONParser])
+@decorators.api_view(['POST'])
+def create_plant(request):
+    serialized_plant = PlantSerializer(data=request.data)
+
+    if serialized_plant.is_valid():
+        serialized_plant.save(owner_id=request.user.id)
+        return JsonResponse({"message": "success"})
+
+    return JsonResponse({"message": "Unable to create plant. Invalid data received"}, status=400)
+
+
+@decorators.permission_classes([IsAuthenticated])
+@decorators.parser_classes([JSONParser])
+@decorators.api_view(['PUT'])
+def update_plant(request, plant_id):
+    plant = get_object_or_404(Plant, id=plant_id)
+    serialized_plant = PlantSerializer(plant, data=request.data)
+
+    if serialized_plant.is_valid():
+        serialized_plant.save(owner_id=request.user.id)
+        return JsonResponse({"message": "success"})
+
+    return JsonResponse({"message": "Unable to create plant. Invalid data received"}, status=400)

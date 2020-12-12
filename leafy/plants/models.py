@@ -5,24 +5,24 @@ from django.urls import reverse
 
 class Plant(models.Model):
     form_fields = [
-        "name", "warning_threshold", "danger_threshold"
+        "name", "warning_threshold", "danger_threshold", "owner_id"
     ]
 
     name = models.CharField(max_length=512)
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    warning_threshold = models.DurationField(
+    warning_threshold = models.PositiveIntegerField(
         help_text=(
             'Plant will be shown in the "Water Soon" section of the dashboard '
-            'after this much time has elapsed since the last watering'
+            'after this many days since the last watering'
         )
     )
 
-    danger_threshold = models.DurationField(
+    danger_threshold = models.PositiveIntegerField(
         help_text=(
             'Plant will be shown in the "Water Now" section of the dashboard '
-            'after this much time has elapsed since the last watering'
+            'after this many days since the last watering'
         )
     )
 

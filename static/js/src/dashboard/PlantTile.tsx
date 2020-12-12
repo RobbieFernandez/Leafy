@@ -1,11 +1,12 @@
 import React from 'react';
-import {LoadingOverlay} from './LoadingOverlay';
+import {LoadingOverlay} from '../layout/LoadingOverlay';
 
 interface plantTileProps {
   lastWatered: string|null;
   id: number;
   waterUrl: string;
   onPlantWatered: ((id: number) => any)|null;
+  onEdit: ((id: number) => any)|null;
   greenTagThreshold: number;
   yellowTagThreshold: number;
   plantName: string;
@@ -82,6 +83,12 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
     return "is-danger";
   }
 
+  editPlant = () => {
+    if (this.props.onEdit !== null) {
+      this.props.onEdit(this.props.id);
+    }
+  }
+
   render = () => {
     const lastWateredDays = this.getDaysSinceLastWatered();
     return <div className="tile is-parent">
@@ -89,6 +96,11 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
         <div className="card">
           <header className="card-header">
             <p className="card-header-title is-centered">{this.props.plantName}</p>
+            <a className="card-header-icon" aria-label="more options" onClick={() => this.editPlant()}>
+              <span className="icon">
+                <i className="fas fa-edit"></i>
+              </span>
+            </a>
           </header>
           <div className="card-content">
             <div className="notification is-primary has-text-centered">

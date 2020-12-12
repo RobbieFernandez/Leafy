@@ -8,6 +8,7 @@
         <title>{% block title %}Leafy{% endblock %}</title>
         <script src={% static "bundle.js" %}></script>
         <script src="https://kit.fontawesome.com/64b017289f.js" crossorigin="anonymous"></script>
+        <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
         {% block extra_head %}{% endblock %}
     </head>
     <body class='main'>
