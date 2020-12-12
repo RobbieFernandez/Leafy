@@ -1,28 +1,37 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 class Plant(models.Model):
-    class DayOfTheWeek(models.TextChoices):
-        MONDAY = ('MONDAY', 'Monday')
-        TUESDAY = ('TUESDAY', 'Tuesday')
-        WEDNESDAY = ('WEDNESDAY', 'Wednesday')
-        THURSDAY = ('THURSDAY', 'Thursday')
-        FRIDAY = ('FRIDAY', 'Friday')
-        SATURDAY = ('SATURDAY', 'Saturday')
-        SUNDAY = ('SUNDAY', 'Sunday')
+    form_fields = [
+        "name", "warning_threshold", "danger_threshold"
+    ]
 
     name = models.CharField(max_length=512)
 
-    watering_day = models.PositiveIntegerField(
-        choices=DayOfTheWeek.choices,
-        null=True
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    warning_threshold = models.DurationField(
+        help_text=(
+            'Plant will be shown in the "Water Soon" section of the dashboard '
+            'after this much time has elapsed since the last watering'
+        )
     )
 
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    danger_threshold = models.DurationField(
+        help_text=(
+            'Plant will be shown in the "Water Now" section of the dashboard '
+            'after this much time has elapsed since the last watering'
+        )
+    )
+
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("plant-update", args=(str(self.id),))
 
 
 class WateredEvent(models.Model):
