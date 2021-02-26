@@ -2,7 +2,7 @@ import React from 'react';
 import {LoadingOverlay} from '../layout/LoadingOverlay';
 
 interface plantTileProps {
-  lastWatered: string|null;
+  lastWatered: number|null;
   id: number;
   waterUrl: string;
   onPlantWatered: ((id: number) => any)|null;
@@ -14,7 +14,7 @@ interface plantTileProps {
 
 interface plantTileState {
   isUpdating: boolean;
-  lastWatered: string|null;
+  lastWatered: number|null;
 }
 
 declare const csrftoken: string;
@@ -67,7 +67,7 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
 
   getDaysSinceLastWatered = () => {
     if (this.props.lastWatered !== null) {
-      const lastWatered = new Date(Date.parse(this.props.lastWatered)).setHours(0, 0, 0, 0);
+      const lastWatered = new Date(this.props.lastWatered).setHours(0, 0, 0, 0);
       const delta = new Date(Date.now()).setHours(0, 0, 0, 0) - lastWatered;
       return delta / (1000 * 60 * 60 * 24);
     }

@@ -2,12 +2,18 @@ var babelLoader = {
   loader: 'babel-loader',
   options: {
     presets: [
-      "@babel/preset-env",
+      [
+        "@babel/preset-env",
+        {
+          "useBuiltIns": "usage",
+          "corejs": 3
+        }
+      ],
       "@babel/preset-react",
     ],
     plugins: [
-      "@babel/plugin-proposal-class-properties",
-    ],
+      "@babel/plugin-proposal-class-properties"
+    ]
   }
 }
 
@@ -46,6 +52,7 @@ module.exports = {
           },
       ]
     },
+    devtool: 'source-map',
     resolve: {
       extensions: ['*', '.js', '.jsx', '.scss', '.tsx', '.ts']
     },

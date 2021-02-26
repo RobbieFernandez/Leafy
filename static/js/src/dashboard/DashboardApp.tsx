@@ -1,14 +1,14 @@
 import React from 'react';
-import Immutable from 'immutable';
 import ReactDOM from 'react-dom';
 
 import PlantTile from './PlantTile';
+import Plant from "./Plant";
 import { LoadingOverlay } from '../layout/LoadingOverlay';
 import { Modal } from '../layout/Modal';
 import PlantEditForm from './PlantEditForm';
 
 interface dashboardState {
-  plants: Immutable.List<Immutable.Map<string, any>>;
+  plants: Plant[];
   loadingPlants: boolean;
   editingPlant: number|null;
 }
@@ -18,13 +18,17 @@ interface dashboardProps {
   waterPlantsUrl: string;
 }
 
+interface getPlantsResponse {
+  plants: {id: number; name: string; last_watered: string;}[]
+}
+
 declare const Urls: any;
 
 export default class DashboardApp extends React.Component<dashboardProps, dashboardState> {
   constructor(props: Readonly<dashboardProps>) {
     super(props);
     this.state = {
-      plants: Immutable.List(),
+      plants: [],
       loadingPlants: false,
       editingPlant: null
     };
@@ -34,24 +38,39 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
     this.fetchPlants();
   }
 
-  fetchPlants = () => {
+  fetchPlants = async () => {
     this.setState({loadingPlants: true});
-    window
-      .fetch(this.props.getPlantsUrl)
-      .then(res => res.json())
-      .then(data => this.setState({plants: Immutable.List(data.plants.map(Immutable.Map)), loadingPlants: false}))
-      .catch(() => this.setState({loadingPlants: false}));
+    const res = await window.fetch(this.props.getPlantsUrl);
+    try {
+      if (res.ok) {
+        const data: getPlantsResponse = await res.json();
+        const parsedPlants: Plant[] = data.plants.map(p => ({
+            name: p.name,
+            id: p.id,
+            lastWatered: new Date(Date.parse(p.last_watered)).setHours(0, 0, 0, 0)
+        }));
+        this.setState({plants: parsedPlants, loadingPlants: false});
+      } else {
+        this.setState({loadingPlants: false});
+      }
+    } catch {
+      this.setState({loadingPlants: false});
+    }
   }
 
   onPlantWatered = (plantId: number) => {
-    const plantIndex = this.state.plants.findIndex(plant => plant.get('id') === plantId);
-    const plant = this.state.plants.get(plantIndex);
+    const plantIndex = this.state.plants.findIndex(plant => plant.id === plantId);
+    const plant = this.state.plants[plantIndex];
     if (plant !== undefined) {
       this.setState({
-        plants: this.state.plants.set(
-          plantIndex,
-          plant.set("last_watered", new Date(Date.now()).toISOString())
-        )
+        plants: [
+          ...this.state.plants.slice(0, plantIndex),
+          {
+            ...plant,
+            lastWatered: Date.now()
+          },
+          ...this.state.plants.slice(plantIndex + 1)
+        ]
       });
     }
   }
@@ -86,11 +105,11 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
           <div className="tile is-ancestor">
             {this.state.plants.map(plant =>
               <PlantTile
-                plantName={plant.get('name')}
-                key={plant.get('id')}
-                id={plant.get('id')}
+                plantName={plant.name}
+                key={plant.id}
+                id={plant.id}
                 waterUrl={this.props.waterPlantsUrl}
-                lastWatered={plant.get('last_watered')}
+                lastWatered={plant.lastWatered}
                 onPlantWatered={this.onPlantWatered}
                 onEdit={this.editPlant}
               />
