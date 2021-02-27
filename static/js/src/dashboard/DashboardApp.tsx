@@ -25,6 +25,7 @@ interface getPlantsResponse {
 }
 
 declare const Urls: any;
+declare const csrftoken: string;
 
 export default class DashboardApp extends React.Component<dashboardProps, dashboardState> {
   constructor(props: Readonly<dashboardProps>) {
@@ -78,6 +79,26 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
     }
   }
 
+  deletePlant = async (plantId: number) => {
+    const res = await window.fetch(
+      Urls.plantDelete(plantId),
+      {
+        method: 'DELETE',
+        headers: {
+          'X-CSRFToken': csrftoken,
+          'Content-Type': 'application/json'
+        }
+      },
+    )
+
+    if (!res.ok) {
+      console.error("Could not delete plant")
+    } else {
+      this.setState({editingPlant: null});
+      this.fetchPlants();
+    }
+  }
+
   editPlant = (plantId: number) => {
     this.setState({editingPlant: plantId});
   }
@@ -107,6 +128,8 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
     submitUrl={Urls.plantUpdate(this.state.editingPlant)}
     updateMethod={"PUT"}
     onSubmit={this.onPlantEdited}
+    allowDelete={true}
+    onDelete={this.deletePlant}
   />
 
   renderPlantCreate = () => <PlantEditForm

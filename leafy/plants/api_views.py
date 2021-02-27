@@ -97,3 +97,11 @@ def update_plant(request, plant_id):
         return JsonResponse({"message": "success", "plantId": plant_id})
 
     return JsonResponse({"message": "Unable to create plant. Invalid data received"}, status=400)
+
+@decorators.permission_classes([IsAuthenticated])
+@decorators.parser_classes([JSONParser])
+@decorators.api_view(['DELETE'])
+def delete_plant(request, plant_id):
+    plant = get_object_or_404(Plant, id=plant_id)
+    plant.delete()
+    return JsonResponse({"message": "success", "plantId": plant_id})

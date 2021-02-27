@@ -1,7 +1,12 @@
 import React from 'react';
 
-interface plantFormProps {
+interface plantFormOptionalProps {
+    allowDelete: boolean;
+    onDelete: (plantId: number) => any;
     plantId: number|null;
+}
+
+interface plantFormProps extends plantFormOptionalProps {
     submitUrl: string;
     updateMethod: string;
     onSubmit: (plantId: number) => any;
@@ -35,9 +40,10 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
         }
     }
 
-    public static defaultProps = {
-        onSubmit: (plantId) => null,
-        plantId: null
+    public static defaultProps: plantFormOptionalProps = {
+        plantId: null,
+        allowDelete: false,
+        onDelete: () => null
     }
 
 
@@ -113,7 +119,11 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
             });
     }
 
-
+    confirmDelete = () => {
+        if (confirm("Are you sure you want to delete this plant?")) {
+            this.props.onDelete(this.props.plantId!);
+        }
+    }
 
     render = () => <div>
         <label className="label">Name:</label>
@@ -185,6 +195,14 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
                     Submit
                 </button>
             </div>
+            {this.props.allowDelete && this.props.plantId !== null && <div className="control">
+                    <button
+                    className={"button is-danger"}
+                    onClick={this.confirmDelete}
+                >
+                    Delete
+                </button>
+            </div>}
         </div>
     </div>
 }
