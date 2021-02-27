@@ -89,6 +89,16 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
     }
   }
 
+  renderLastWateredText = (lastWateredDays: number) => {
+    if (isNaN(lastWateredDays)) {
+     return <span className="tag is-danger">Never Watered</span>
+    } else if (lastWateredDays === 0) {
+      return <span className={"tag " + this.getWateredTagDangerLevel(lastWateredDays)}>Today</span>
+    } else {
+      return <span className={"tag " + this.getWateredTagDangerLevel(lastWateredDays)}>{lastWateredDays} days ago</span>
+    }
+  }
+
   render = () => {
     const lastWateredDays = this.getDaysSinceLastWatered();
     return <div className="card">
@@ -107,11 +117,7 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
         </div>
         <div className="tags has-addons">
           <span className="tag">Last Watered</span>
-          {
-            isNaN(lastWateredDays) ?
-              <span className="tag is-danger">Never Watered</span> :
-              <span className={"tag " + this.getWateredTagDangerLevel(lastWateredDays)}>{lastWateredDays} days ago</span>
-          }
+          {this.renderLastWateredText(lastWateredDays)}
         </div>
       </div>
       <div className="card-footer">
