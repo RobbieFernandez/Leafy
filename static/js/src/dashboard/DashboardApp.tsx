@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import PlantTile from './PlantTile';
 import Plant from "./Plant";
+import AddPlantTile from "./AddPlantTile";
 import { LoadingOverlay } from '../layout/LoadingOverlay';
 import { Modal } from '../layout/Modal';
 import PlantEditForm from './PlantEditForm';
@@ -11,6 +12,7 @@ interface dashboardState {
   plants: Plant[];
   loadingPlants: boolean;
   editingPlant: number|null;
+  creatingPlant: boolean;
 }
 
 interface dashboardProps {
@@ -30,7 +32,8 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
     this.state = {
       plants: [],
       loadingPlants: false,
-      editingPlant: null
+      editingPlant: null,
+      creatingPlant: false
     };
   }
 
@@ -79,10 +82,39 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
     this.setState({editingPlant: plantId});
   }
 
-  onPlantEdited = (plantId: number) => {
+  onPlantEdited = () => {
     this.setState({editingPlant: null});
     this.fetchPlants();
   }
+
+  onPlantCreated = () => {
+    this.setState({creatingPlant: false});
+    this.fetchPlants();
+  }
+
+  renderModalContent = () => {
+    if (this.state.editingPlant !== null) {
+      return this.renderPlantEdit(this.state.editingPlant);
+    } else if (this.state.creatingPlant) {
+      return this.renderPlantCreate();
+    } else {
+      return <div/>
+    }
+  }
+
+  renderPlantEdit = (plantId: number) => <PlantEditForm
+    plantId={plantId}
+    submitUrl={Urls.plantUpdate(this.state.editingPlant)}
+    updateMethod={"PUT"}
+    onSubmit={this.onPlantEdited}
+  />
+
+  renderPlantCreate = () => <PlantEditForm
+    submitUrl={Urls.plantCreate()}
+    updateMethod={"POST"}
+    onSubmit={this.onPlantCreated}
+  />
+
 
   render = () => {
     if (this.state.loadingPlants) {
@@ -90,23 +122,17 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
     } else {
       return <div className="container">
         <Modal
-          close={() => {this.setState({editingPlant: null})}}
-          title={"Edit Plant"}
-          isOpen={this.state.editingPlant !== null}
+          close={() => {this.setState({editingPlant: null, creatingPlant: false})}}
+          title={this.state.editingPlant === null? "Create Plant" : "Edit Plant"}
+          isOpen={this.state.editingPlant !== null || this.state.creatingPlant}
         >
-          {this.state.editingPlant !== null && <PlantEditForm
-            plantId={this.state.editingPlant}
-            submitUrl={Urls.plantUpdate(this.state.editingPlant)}
-            updateMethod={"PUT"}
-            onSubmit={this.onPlantEdited}
-          />}
+          {this.renderModalContent()}
         </Modal>
         <div className="columns is-multiline">
           {this.state.plants.map(plant =>
-            <div className="column is-one-quarter">
+            <div className="column is-one-quarter" key={plant.id}>
               <PlantTile
                 plantName={plant.name}
-                key={plant.id}
                 id={plant.id}
                 waterUrl={this.props.waterPlantsUrl}
                 lastWatered={plant.lastWatered}
@@ -115,6 +141,11 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
               />
             </div>
           )}
+          <div className="column is-one-quarter">
+            <AddPlantTile
+              onClick={() => this.setState({creatingPlant: true})}
+            />
+          </div>
         </div>
       </div>
     }

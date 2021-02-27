@@ -1,10 +1,10 @@
 import React from 'react';
 
 interface plantFormProps {
-    plantId: number;
+    plantId: number|null;
     submitUrl: string;
     updateMethod: string;
-    onSubmit?: (plantId: number) => any;
+    onSubmit: (plantId: number) => any;
 }
 
 interface plantFormState {
@@ -15,6 +15,11 @@ interface plantFormState {
     isSubmitting: boolean;
 }
 
+interface plantResponse {
+    message: string;
+    plantId: number;
+}
+
 declare const Urls: any;
 declare const csrftoken: string;
 
@@ -22,16 +27,17 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: true,
+            isLoading: this.props.plantId !== null,
             name: "",
             warningThreshold: 0,
             dangerThreshold: 0,
-            isSubmitting: false
+            isSubmitting: false,
         }
     }
 
     public static defaultProps = {
-        onSubmit: plantId => null
+        onSubmit: (plantId) => null,
+        plantId: null
     }
 
 
@@ -51,7 +57,11 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
             .catch(() => this.setState({ isLoading: false }));
     }
 
-    componentDidMount = () => { this.fetchForm() }
+    componentDidMount = () => {
+        if (this.props.plantId !== null) {
+            this.fetchForm();
+        }
+    }
 
     addLoadingClass = (className: string) => className + (this.state.isLoading ? " is-loading" : "")
 
@@ -92,16 +102,18 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
             .then(response => {
                 this.setState({ isSubmitting: false })
                 if (!response.ok) {
-                    throw new Error("Error watering plant");
+                    throw new Error("Error updating plant");
                 }
-            })
-            .then(() => {
-                this.props.onSubmit!(this.props.plantId);
+                return response.json();
+            }).then((data: plantResponse) => {
+                this.props.onSubmit(data.plantId);
             })
             .catch(err => {
                 console.error(err);
             });
     }
+
+
 
     render = () => <div>
         <label className="label">Name:</label>
@@ -166,6 +178,7 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
         <div className="field is-grouped is-grouped-centered">
             <div className="control">
                 <button
+                    disabled={this.state.name === "" || this.state.warningThreshold === 0 || this.state.dangerThreshold === 0}
                     className={"button is-link " + (this.state.isSubmitting ? " is-loading" : "")}
                     onClick={() => this.submitForm()}
                 >

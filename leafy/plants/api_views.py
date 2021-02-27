@@ -79,8 +79,8 @@ def create_plant(request):
     serialized_plant = PlantSerializer(data=request.data)
 
     if serialized_plant.is_valid():
-        serialized_plant.save(owner_id=request.user.id)
-        return JsonResponse({"message": "success"})
+        plant = serialized_plant.save(owner_id=request.user.id)
+        return JsonResponse({"message": "success", "plantId": plant.id})
 
     return JsonResponse({"message": "Unable to create plant. Invalid data received"}, status=400)
 
@@ -94,6 +94,6 @@ def update_plant(request, plant_id):
 
     if serialized_plant.is_valid():
         serialized_plant.save(owner_id=request.user.id)
-        return JsonResponse({"message": "success"})
+        return JsonResponse({"message": "success", "plantId": plant_id})
 
     return JsonResponse({"message": "Unable to create plant. Invalid data received"}, status=400)

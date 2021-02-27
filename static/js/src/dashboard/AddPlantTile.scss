@@ -1,0 +1,43 @@
+$border-colour: lightgray;
+$border-style: dashed;
+$border-width: medium;
+
+$hover-colour: silver;
+
+.add-plant-card {
+    // box-shadow: none;
+    border-color: $border-colour;
+    border-style: $border-style;
+    color: $border-colour;
+    height: 100%;
+    border-width: $border-width;
+    cursor: pointer;
+
+    &:hover {
+        color: $hover-colour;
+        border-color: $hover-colour;
+    }
+
+    .card-header {
+        border-color: inherit;
+        border-style: $border-style;
+        border-width: 0 0 $border-width;
+        color: inherit;
+
+        .card-header-title {
+            color: inherit;
+        }
+    }
+
+    .notification {
+        background-color: white;
+        border-color: inherit;
+        border-style: $border-style;
+        border-width: $border-width;
+        color: inherit;
+
+        a {
+            border: none;
+        }
+    }
+}
