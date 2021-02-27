@@ -11,7 +11,7 @@ const AddPlantTile = (props: addPlantProps) => <div className="card add-plant-ca
       </header>
     <div className="card-content">
         <div className="notification has-text-centered">
-            <a className="far fa-plus-square plant-icon"></a>
+            <i className="fas fa-plus plant-icon"></i>
         </div>
     </div>
 </div>
