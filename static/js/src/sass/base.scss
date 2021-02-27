@@ -1,6 +1,7 @@
 @charset "utf-8";
 
-$primary: rgb(100, 160, 130);
+$success: rgb(75, 200, 0);
+$primary: rgb(0, 100, 0);
 $navbar-breakpoint: 0;
 
 @import "bulma";
@@ -10,9 +11,9 @@ $navbar-breakpoint: 0;
 @import "./colours";
 
 .main {
-display: flex;
-min-height: 100vh;
-flex-direction: column;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
 .section {

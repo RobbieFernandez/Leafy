@@ -2,10 +2,16 @@
 
 {% block title %}Leafy - Log In{% endblock%}
 
+{% block navbar %}{% endblock %}
+
 {%block app%}
 <section classname='section'>
     <div class="container form-wrapper">
+        <figure class="logo-wrapper">
+            <img src="/static/full_logo.svg"/>
+        </figure>
         {% if form.errors %}
+
         <div class="notification is-danger is-light">
             <p>Your username and password didn't match. Please try again.</p>
         </div>

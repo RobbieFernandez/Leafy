@@ -15,10 +15,11 @@
         <script>
             const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         </script>
+        {% block navbar %}
         <nav class="navbar has-shadow is-fixed-top" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">
-                    <img src="/static/full_logo.png" width="113" height="32">
+                    <img src="/static/full_logo.svg" style="height: 2.75rem; max-height: none">
                 </a>
             </div>
             <div class="navbar-menu is-active" id="navbar">
@@ -33,13 +34,14 @@
                 </div>
             </div>
         </nav>
+        {% endblock %}
         <section class="section">
-            {%block app%}
+            {% block app %}
             {% endblock %}
         </section>
         <footer class="footer">
             <div class="content has-text-centered">
-                Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+                Created by Robert Fernandez
             </div>
         </footer>
     </body>
