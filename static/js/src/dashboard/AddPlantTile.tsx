@@ -1,5 +1,4 @@
 import React from 'react';
-import "./AddPlantTile.scss";
 
 interface addPlantProps {
     onClick: () => any;

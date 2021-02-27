@@ -27,6 +27,5 @@
         "start": "webpack-cli -c webpack.config.js",
         "webpack-watch": "webpack-cli -wc webpack.config.js"
     },
-    "dependencies": {
-    }
+    "dependencies": {}
 }
