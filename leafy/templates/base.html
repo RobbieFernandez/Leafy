@@ -11,12 +11,12 @@
         <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
         {% block extra_head %}{% endblock %}
     </head>
-    <body class='main has-navbar-fixed-top'>
+    <body class='main'>
         <script>
             const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         </script>
         {% block navbar %}
-        <nav class="navbar has-shadow is-fixed-top" role="navigation" aria-label="main navigation">
+        <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a class="navbar-item" href="/">
                     <img src="/static/full_logo.svg" style="height: 2.75rem; max-height: none">
