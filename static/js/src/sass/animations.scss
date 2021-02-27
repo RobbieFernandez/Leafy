@@ -1,0 +1,27 @@
+@keyframes slide-in {
+    from {top: -100%; opacity: 0;}
+    to {top: 0; opacity: 1;}
+}
+
+.card-slide-appear.card-slide-appear-active {
+    div {
+        animation-name: slide-in;
+        animation-duration: 300ms;
+    }
+}
+
+.card-slide-enter.card-slide-enter-active {
+    div {
+        animation-name: slide-in;
+        animation-duration: 300ms;
+    }
+}
+
+.card-slide-leave.card-slide-leave-active {
+    div {
+        animation-name: slide-in;
+        animation-duration: 300ms;
+        animation-direction: reverse;
+    }
+}
+

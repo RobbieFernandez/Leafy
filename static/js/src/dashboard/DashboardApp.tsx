@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 import PlantTile from './PlantTile';
 import Plant from "./Plant";
@@ -139,40 +140,45 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
   />
 
 
-  render = () => {
-    if (this.state.loadingPlants) {
-      return <LoadingOverlay/>
-    } else {
-      return <div className="container">
+  render = () => <>
+      <div className="container">
         <Modal
           close={() => {this.setState({editingPlant: null, creatingPlant: false})}}
           title={this.state.editingPlant === null? "Create Plant" : "Edit Plant"}
           isOpen={this.state.editingPlant !== null || this.state.creatingPlant}
-        >
+          >
           {this.renderModalContent()}
         </Modal>
         <div className="columns is-multiline">
-          {this.state.plants.map(plant =>
-            <div className="column is-one-quarter" key={plant.id}>
-              <PlantTile
-                plantName={plant.name}
-                id={plant.id}
-                waterUrl={this.props.waterPlantsUrl}
-                lastWatered={plant.lastWatered}
-                onPlantWatered={this.onPlantWatered}
-                onEdit={this.editPlant}
-              />
+          <CSSTransitionGroup
+            transitionName="card-slide"
+            transitionEnterTimeout={300}
+            transitionLeaveTimeout={300}
+            component={React.Fragment}
+            transitionAppear={true}
+            >
+            {this.state.plants.map(plant =>
+              <div className="column is-one-quarter" key={plant.id}>
+                <PlantTile
+                  plantName={plant.name}
+                  id={plant.id}
+                  waterUrl={this.props.waterPlantsUrl}
+                  lastWatered={plant.lastWatered}
+                  onPlantWatered={this.onPlantWatered}
+                  onEdit={this.editPlant}
+                  />
+              </div>
+            )}
+            <div className="column is-one-quarter" key={"add-plant"}>
+              <AddPlantTile
+                onClick={() => this.setState({creatingPlant: true})}
+                />
             </div>
-          )}
-          <div className="column is-one-quarter">
-            <AddPlantTile
-              onClick={() => this.setState({creatingPlant: true})}
-            />
-          </div>
+          </CSSTransitionGroup>
         </div>
       </div>
-    }
-  }
+      {this.state.loadingPlants && <LoadingOverlay/>}
+  </>
 }
 
 export const init = (props: Readonly<dashboardProps>, container) => {
