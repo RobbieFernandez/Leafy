@@ -91,42 +91,39 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
 
   render = () => {
     const lastWateredDays = this.getDaysSinceLastWatered();
-    return <div className="tile is-parent">
-      <div className="tile is-child">
-        <div className="card">
-          <header className="card-header">
-            <p className="card-header-title is-centered">{this.props.plantName}</p>
-            <a className="card-header-icon" aria-label="more options" onClick={() => this.editPlant()}>
-              <span className="icon">
-                <i className="fas fa-edit"></i>
-              </span>
-            </a>
-          </header>
-          <div className="card-content">
-            <div className="notification is-primary has-text-centered">
-              <i className="fas fa-seedling plant-icon"></i>
-            </div>
-            <div className="tags has-addons">
-              <span className="tag">Last Watered</span>
-              {
-                isNaN(lastWateredDays) ?
-                  <span className="tag is-danger">Never Watered</span> :
-                  <span className={"tag " + this.getWateredTagDangerLevel(lastWateredDays)}>{lastWateredDays} days ago</span>
-              }
-            </div>
-          </div>
-          <div className="card-footer">
-            <div className="card-footer-item">
-              {
-                (lastWateredDays > 0 || isNaN(lastWateredDays)) ?
-                  <a onClick={this.water}>Water Now</a> :
-                  <p className="has-text-grey">Water Now</p>
-              }
-            </div>
-          </div>
-          {this.state.isUpdating && <LoadingOverlay />}
+    return <div className="card">
+      <header className="card-header">
+        <p className="card-header-title">{this.props.plantName}
+        </p>
+        <a className="card-header-icon" aria-label="more options" onClick={() => this.editPlant()}>
+          <span className="icon">
+            <i className="fas fa-edit"></i>
+          </span>
+        </a>
+      </header>
+      <div className="card-content">
+        <div className="notification is-primary has-text-centered">
+          <i className="fas fa-seedling plant-icon"></i>
+        </div>
+        <div className="tags has-addons">
+          <span className="tag">Last Watered</span>
+          {
+            isNaN(lastWateredDays) ?
+              <span className="tag is-danger">Never Watered</span> :
+              <span className={"tag " + this.getWateredTagDangerLevel(lastWateredDays)}>{lastWateredDays} days ago</span>
+          }
         </div>
       </div>
+      <div className="card-footer">
+        <div className="card-footer-item">
+          {
+            (lastWateredDays > 0 || isNaN(lastWateredDays)) ?
+              <a onClick={this.water}>Water Now</a> :
+              <p className="has-text-grey">Water Now</p>
+          }
+        </div>
+      </div>
+      {this.state.isUpdating && <LoadingOverlay />}
     </div>
   }
 }

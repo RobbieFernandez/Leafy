@@ -88,7 +88,7 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
     if (this.state.loadingPlants) {
       return <LoadingOverlay/>
     } else {
-      return <>
+      return <div className="container">
         <Modal
           close={() => {this.setState({editingPlant: null})}}
           title={"Edit Plant"}
@@ -101,9 +101,9 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
             onSubmit={this.onPlantEdited}
           />}
         </Modal>
-        <div className='container'>
-          <div className="tile is-ancestor">
-            {this.state.plants.map(plant =>
+        <div className="columns is-multiline">
+          {this.state.plants.map(plant =>
+            <div className="column is-one-quarter">
               <PlantTile
                 plantName={plant.name}
                 key={plant.id}
@@ -113,10 +113,10 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
                 onPlantWatered={this.onPlantWatered}
                 onEdit={this.editPlant}
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
-      </>
+      </div>
     }
   }
 }
