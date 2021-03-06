@@ -12,12 +12,12 @@ $navbar-breakpoint: 0;
 @import "./AddPlantTile";
 @import "./animations";
 
-.main {
+div.page-wrapper {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
 }
 
-.section {
-    flex: 1;
+footer.footer {
+    margin-top: auto;
 }

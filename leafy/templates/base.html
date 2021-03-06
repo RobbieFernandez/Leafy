@@ -11,38 +11,42 @@
         <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
         {% block extra_head %}{% endblock %}
     </head>
-    <body class='main'>
+    <body>
         <script>
             const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         </script>
-        {% block navbar %}
-        <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-                <a class="navbar-item" href="/">
-                    <img src="/static/full_logo.svg" style="height: 2.75rem; max-height: none">
-                </a>
-            </div>
-            <div class="navbar-menu is-active" id="navbar">
-                <div class="navbar-end">
-                    <div class="navbar-item">
-                        <div class="buttons">
-                            {% if user.is_authenticated %}
-                            <a class="button is-success" href="{% url "logout" %}">Log Out</a>
-                            {% endif %}
+        <div class="page-wrapper">
+            {% block navbar %}
+            <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="/">
+                        <img src="/static/full_logo.svg" style="height: 2.75rem; max-height: none">
+                    </a>
+                </div>
+                <div class="navbar-menu is-active" id="navbar">
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                {% if user.is_authenticated %}
+                                <a class="button is-success" href="{% url "logout" %}">Log Out</a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </nav>
-        {% endblock %}
-        <section class="section">
-            {% block app %}
+            </nav>
             {% endblock %}
-        </section>
-        <footer class="footer">
-            <div class="content has-text-centered">
-                Created by Robert Fernandez
-            </div>
-        </footer>
+            <section class="section">
+                {% block app %}
+                {% endblock %}
+            </section>
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <span>
+                        <b>Leafy</b> Created by <a href="https://github.com/RobbieFernandez">Robert Fernandez</a>
+                    </span>
+                </div>
+            </footer>
+        </div>
     </body>
 </html>

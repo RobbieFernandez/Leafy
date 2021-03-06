@@ -5,11 +5,9 @@ $border-width: medium;
 $hover-colour: silver;
 
 .add-plant-card {
-    // box-shadow: none;
     border-color: $border-colour;
     border-style: $border-style;
     color: $border-colour;
-    height: 100%;
     border-width: $border-width;
     cursor: pointer;
 
