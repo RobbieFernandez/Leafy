@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block navbar %}{% endblock %}
+
+{% block title %}{{title}}{% endblock%}
+
+{%block app%}
+    <section classname='section'>
+        <div class="container form-wrapper">
+            <figure class="logo-wrapper">
+                <img src="/static/full_logo.svg"/>
+            </figure>
+            {{ form_title|safe }}
+            <form method="post" class="control">
+                {% include "bulma_form.html" with form=form %}
+                <div class="field">
+                    <p class="control has-text-centered">
+                        <button class="button is-success">{{submit_label}}</button>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </section>
+{%endblock%}
