@@ -1,12 +1,12 @@
 import React from 'react';
-import {LoadingOverlay} from '../layout/LoadingOverlay';
+import { LoadingOverlay } from '../layout/LoadingOverlay';
 
 interface plantTileProps {
-  lastWatered: number|null;
+  lastWatered: number | null;
   id: number;
   waterUrl: string;
-  onPlantWatered: ((id: number) => any)|null;
-  onEdit: ((id: number) => any)|null;
+  onPlantWatered: ((id: number) => any) | null;
+  onEdit: ((id: number) => any) | null;
   greenTagThreshold: number;
   yellowTagThreshold: number;
   plantName: string;
@@ -14,7 +14,7 @@ interface plantTileProps {
 
 interface plantTileState {
   isUpdating: boolean;
-  lastWatered: number|null;
+  lastWatered: number | null;
 }
 
 declare const csrftoken: string;
@@ -35,13 +35,13 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
   }
 
   water = () => {
-    this.setState({isUpdating: true});
+    this.setState({ isUpdating: true });
     window
       .fetch(
         this.props.waterUrl,
         {
           method: 'POST',
-          body: JSON.stringify({plantId: this.props.id}),
+          body: JSON.stringify({ plantId: this.props.id }),
           headers: {
             'X-CSRFToken': csrftoken,
             'Content-Type': 'application/json'
@@ -54,14 +54,14 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
         }
       })
       .then(() => {
-        this.setState({isUpdating: false});
+        this.setState({ isUpdating: false });
         if (this.props.onPlantWatered !== null) {
           this.props.onPlantWatered(this.props.id);
         }
       })
       .catch(err => {
         console.error(err);
-        this.setState({isUpdating: false});
+        this.setState({ isUpdating: false });
       });
   }
 
@@ -91,7 +91,7 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
 
   renderLastWateredText = (lastWateredDays: number) => {
     if (isNaN(lastWateredDays)) {
-     return <span className="tag is-danger">Never Watered</span>
+      return <span className="tag is-danger">Never Watered</span>
     } else if (lastWateredDays === 0) {
       return <span className={"tag " + this.getWateredTagDangerLevel(lastWateredDays)}>Today</span>
     } else {

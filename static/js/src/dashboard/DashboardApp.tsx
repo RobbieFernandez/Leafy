@@ -12,7 +12,7 @@ import PlantEditForm from './PlantEditForm';
 interface dashboardState {
   plants: Plant[];
   loadingPlants: boolean;
-  editingPlant: number|null;
+  editingPlant: number | null;
   creatingPlant: boolean;
 }
 
@@ -22,7 +22,7 @@ interface dashboardProps {
 }
 
 interface getPlantsResponse {
-  plants: {id: number; name: string; last_watered: string;}[]
+  plants: { id: number; name: string; last_watered: string; }[]
 }
 
 declare const Urls: any;
@@ -44,22 +44,22 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
   }
 
   fetchPlants = async () => {
-    this.setState({loadingPlants: true});
+    this.setState({ loadingPlants: true });
     const res = await window.fetch(this.props.getPlantsUrl);
     try {
       if (res.ok) {
         const data: getPlantsResponse = await res.json();
         const parsedPlants: Plant[] = data.plants.map(p => ({
-            name: p.name,
-            id: p.id,
-            lastWatered: new Date(Date.parse(p.last_watered)).setHours(0, 0, 0, 0)
+          name: p.name,
+          id: p.id,
+          lastWatered: new Date(Date.parse(p.last_watered)).setHours(0, 0, 0, 0)
         }));
-        this.setState({plants: parsedPlants, loadingPlants: false});
+        this.setState({ plants: parsedPlants, loadingPlants: false });
       } else {
-        this.setState({loadingPlants: false});
+        this.setState({ loadingPlants: false });
       }
     } catch {
-      this.setState({loadingPlants: false});
+      this.setState({ loadingPlants: false });
     }
   }
 
@@ -95,22 +95,22 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
     if (!res.ok) {
       console.error("Could not delete plant")
     } else {
-      this.setState({editingPlant: null});
+      this.setState({ editingPlant: null });
       this.fetchPlants();
     }
   }
 
   editPlant = (plantId: number) => {
-    this.setState({editingPlant: plantId});
+    this.setState({ editingPlant: plantId });
   }
 
   onPlantEdited = () => {
-    this.setState({editingPlant: null});
+    this.setState({ editingPlant: null });
     this.fetchPlants();
   }
 
   onPlantCreated = () => {
-    this.setState({creatingPlant: false});
+    this.setState({ creatingPlant: false });
     this.fetchPlants();
   }
 
@@ -120,7 +120,7 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
     } else if (this.state.creatingPlant) {
       return this.renderPlantCreate();
     } else {
-      return <div/>
+      return <div />
     }
   }
 
@@ -141,46 +141,46 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
 
 
   render = () => <>
-      <div className="container">
-        <Modal
-          close={() => {this.setState({editingPlant: null, creatingPlant: false})}}
-          title={this.state.editingPlant === null? "Create Plant" : "Edit Plant"}
-          isOpen={this.state.editingPlant !== null || this.state.creatingPlant}
-          >
-          {this.renderModalContent()}
-        </Modal>
-        <div className="columns is-multiline">
-          <CSSTransitionGroup
-            transitionName="card-slide"
-            transitionEnterTimeout={300}
-            transitionLeaveTimeout={300}
-            component={React.Fragment}
-            transitionAppear={true}
-            >
-            {this.state.plants.map(plant =>
-              <div className="column is-one-quarter" key={plant.id}>
-                <PlantTile
-                  plantName={plant.name}
-                  id={plant.id}
-                  waterUrl={this.props.waterPlantsUrl}
-                  lastWatered={plant.lastWatered}
-                  onPlantWatered={this.onPlantWatered}
-                  onEdit={this.editPlant}
-                  />
-              </div>
-            )}
-            <div className="column is-one-quarter" key={"add-plant"}>
-              <AddPlantTile
-                onClick={() => this.setState({creatingPlant: true})}
-                />
+    <div className="container">
+      <Modal
+        close={() => { this.setState({ editingPlant: null, creatingPlant: false }) }}
+        title={this.state.editingPlant === null ? "Create Plant" : "Edit Plant"}
+        isOpen={this.state.editingPlant !== null || this.state.creatingPlant}
+      >
+        {this.renderModalContent()}
+      </Modal>
+      <div className="columns is-multiline">
+        <CSSTransitionGroup
+          transitionName="card-slide"
+          transitionEnterTimeout={300}
+          transitionLeaveTimeout={300}
+          component={React.Fragment}
+          transitionAppear={true}
+        >
+          {this.state.plants.map(plant =>
+            <div className="column is-one-quarter" key={plant.id}>
+              <PlantTile
+                plantName={plant.name}
+                id={plant.id}
+                waterUrl={this.props.waterPlantsUrl}
+                lastWatered={plant.lastWatered}
+                onPlantWatered={this.onPlantWatered}
+                onEdit={this.editPlant}
+              />
             </div>
-          </CSSTransitionGroup>
-        </div>
+          )}
+          <div className="column is-one-quarter" key={"add-plant"}>
+            <AddPlantTile
+              onClick={() => this.setState({ creatingPlant: true })}
+            />
+          </div>
+        </CSSTransitionGroup>
       </div>
-      {this.state.loadingPlants && <LoadingOverlay/>}
+    </div>
+    {this.state.loadingPlants && <LoadingOverlay />}
   </>
 }
 
 export const init = (props: Readonly<dashboardProps>, container) => {
-  ReactDOM.render(<DashboardApp {...props}/>, container);
+  ReactDOM.render(<DashboardApp {...props} />, container);
 }
