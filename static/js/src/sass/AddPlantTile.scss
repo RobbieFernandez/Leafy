@@ -21,6 +21,7 @@ $hover-colour: silver;
         border-style: $border-style;
         border-width: 0 0 $border-width;
         color: inherit;
+        box-shadow: none;
 
         .card-header-title {
             color: inherit;
