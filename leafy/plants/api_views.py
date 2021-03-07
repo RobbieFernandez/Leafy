@@ -12,18 +12,11 @@ import pytz
 from .models import Plant, WateredEvent
 from .serializers import PlantSerializer
 
-DEFAULT_PLANT_PAGE_SIZE = 20
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%S"
 
 @decorators.permission_classes([IsAuthenticated])
 @decorators.api_view(['GET'])
 def get_plants(request):
-    page_number = request.GET.get('pageNumber', 1)
-    page_size = request.GET.get('pageSize', DEFAULT_PLANT_PAGE_SIZE)
-
-    page_start = (page_number - 1) * page_size
-    page_end = page_start + page_size
-
     plant_queryset = Plant.objects.annotate(
         last_watered=Subquery(
             WateredEvent.objects.filter(
@@ -42,7 +35,7 @@ def get_plants(request):
         )
 
     return JsonResponse({
-        "plants": [format_row(p) for p in plant_queryset[page_start:page_end]]
+        "plants": [format_row(p) for p in plant_queryset]
     })
 
 
