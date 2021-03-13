@@ -1,5 +1,12 @@
 {
-    "devDependencies": {
+    "dependencies": {
+        "bulma": "^0.9.0",
+        "bulma-slider": "^2.0.4",
+        "core-js": "^3.9.0",
+        "moment": "^2.29.0",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
+        "react-transition-group": "^1.2.1",
         "@babel/core": "^7.10.1",
         "@babel/plugin-proposal-class-properties": "^7.10.4",
         "@babel/preset-env": "^7.10.1",
@@ -17,15 +24,6 @@
         "webpack": "^4.43.0",
         "webpack-cli": "^3.3.11",
         "webpack-merge": "^5.7.3"
-    },
-    "dependencies": {
-        "bulma": "^0.9.0",
-        "bulma-slider": "^2.0.4",
-        "core-js": "^3.9.0",
-        "moment": "^2.29.0",
-        "react": "^16.13.1",
-        "react-dom": "^16.13.1",
-        "react-transition-group": "^1.2.1"
     },
     "scripts": {
         "dev": "webpack-cli --config webpack.config.js",
