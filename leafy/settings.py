@@ -24,10 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '&=9mzx%benre*_gl+1#sf_m7uc6@c#4r5y))g9232io$ulgipk'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["https://leafy-app.herokuapp.com/"]
+ALLOWED_HOSTS = ["leafy-app.herokuapp.com"]
 
 LOGOUT_REDIRECT_URL = 'plant-dashbaord'
 LOGIN_URL = 'login'
