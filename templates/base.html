@@ -1,5 +1,4 @@
 {% load static %}
-{% csrf_token %}
 
 <!DOCTYPE html>
 <html>
@@ -9,9 +8,11 @@
         <script src={% static "bundle.js" %}></script>
         <script src="https://kit.fontawesome.com/64b017289f.js" crossorigin="anonymous"></script>
         <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
+        <link rel="shortcut icon" href="{% static 'favicon.ico' %}"/>
         {% block extra_head %}{% endblock %}
     </head>
     <body>
+        {% csrf_token %}
         <script>
             const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         </script>
