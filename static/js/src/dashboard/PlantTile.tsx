@@ -76,7 +76,7 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
 
   getWateredTagDangerLevel = (daysSinceLastWatered) => {
     if (daysSinceLastWatered < this.props.greenTagThreshold) {
-      return "is-success";
+      return "is-primary";
     } else if (daysSinceLastWatered < this.props.yellowTagThreshold) {
       return "is-warning";
     }
@@ -112,7 +112,7 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
         </a>
       </header>
       <div className="card-content">
-        <div className="notification is-primary has-text-centered">
+        <div className="notification has-background-primary-dark has-text-white has-text-centered">
           <i className="fas fa-seedling plant-icon"></i>
         </div>
         <div className="tags has-addons">

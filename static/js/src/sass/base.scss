@@ -1,8 +1,10 @@
 @charset "utf-8";
 
-$success: rgb(75, 200, 0);
-$primary: rgb(0, 100, 0);
+$primary: rgb(75, 200, 0);
+$success: $primary;
+$primary-dark: rgb(0, 100, 0);
 $navbar-breakpoint: 0;
+$link: $primary;
 
 @import "bulma/sass/utilities/_all.sass";
 @import "bulma/sass/base/_all.sass";
