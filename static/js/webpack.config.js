@@ -25,7 +25,7 @@ var tsLoader = {
 }
 
 module.exports = {
-  entry: './src/app.js',
+  entry: __dirname + '/src/app.js',
   mode: 'development',
   module: {
     rules: [
@@ -42,11 +42,7 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // Creates `style` nodes from JS strings
-          'style-loader',
-          // Translates CSS into CommonJS
           'css-loader',
-          // Compiles Sass to CSS
           'sass-loader',
         ],
       },
