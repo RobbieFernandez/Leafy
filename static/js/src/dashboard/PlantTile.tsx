@@ -1,5 +1,7 @@
 import React from 'react';
 import { LoadingOverlay } from '../layout/LoadingOverlay';
+import WaterCalendar from "./WaterCalendar";
+import { Modal } from "../layout/Modal";
 
 interface plantTileProps {
   lastWatered: number | null;
@@ -15,6 +17,7 @@ interface plantTileProps {
 interface plantTileState {
   isUpdating: boolean;
   lastWatered: number | null;
+  showCalendar: boolean;
 }
 
 declare const csrftoken: string;
@@ -30,7 +33,8 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
     super(props);
     this.state = {
       isUpdating: false,
-      lastWatered: this.props.lastWatered
+      lastWatered: this.props.lastWatered,
+      showCalendar: false
     };
   }
 
@@ -99,18 +103,23 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
     }
   }
 
-  render = () => {
+  toggleCalendar = () => {
+    this.setState({ showCalendar: !this.state.showCalendar });
+  }
+
+  renderCalendar = () => {
+    return <div className="card-content">
+      <WaterCalendar
+        plantId={this.props.id}
+        warningThreshold={this.props.greenTagThreshold}
+        dangerThreshold={this.props.yellowTagThreshold}
+      />
+    </div>
+  }
+
+  renderWaterCard = () => {
     const lastWateredDays = this.getDaysSinceLastWatered();
-    return <div className="card">
-      <header className="card-header">
-        <p className="card-header-title">{this.props.plantName}
-        </p>
-        <a className="card-header-icon" aria-label="more options" onClick={() => this.editPlant()}>
-          <span className="icon">
-            <i className="fas fa-edit"></i>
-          </span>
-        </a>
-      </header>
+    return <>
       <div className="card-content">
         <div className="notification has-background-primary-dark has-text-white has-text-centered">
           <i className="fas fa-seedling plant-icon"></i>
@@ -129,6 +138,37 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
           }
         </div>
       </div>
+    </>
+  }
+
+  renderCardContent = () => {
+    if (this.state.showCalendar) {
+      return this.renderCalendar();
+    } else {
+      return this.renderWaterCard();
+    }
+  }
+
+  render = () => {
+    return <div className="card">
+      <header className="card-header">
+        <p className="card-header-title">{this.props.plantName}
+        </p>
+        <a
+          className="card-header-icon" aria-label="more options"
+          onClick={() => this.toggleCalendar()}
+        >
+          <span className="icon">
+            <i className="far fa-calendar" style={{ position: 'relative' }}></i>
+          </span>
+        </a>
+        <a className="card-header-icon" aria-label="more options" onClick={() => this.editPlant()}>
+          <span className="icon">
+            <i className="fas fa-edit"></i>
+          </span>
+        </a>
+      </header>
+      {this.renderCardContent()}
       {this.state.isUpdating && <LoadingOverlay />}
     </div>
   }

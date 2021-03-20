@@ -3,9 +3,12 @@ from datetime import datetime
 from rest_framework import decorators
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import JSONParser
-from django.http import JsonResponse
+
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.db.models import Subquery, OuterRef
+from django.db.models.functions import ExtractDay
+
 from toolz import update_in
 import pytz
 
@@ -98,3 +101,29 @@ def delete_plant(request, plant_id):
     plant = get_object_or_404(Plant, id=plant_id)
     plant.delete()
     return JsonResponse({"message": "success", "plantId": plant_id})
+
+@decorators.permission_classes([IsAuthenticated])
+@decorators.api_view(['GET'])
+def plant_watered_days(request, plant_id):
+    try:
+        month = int(request.GET['month'])
+        year = int(request.GET['year'])
+    except (KeyError, TypeError, ValueError):
+        return HttpResponseBadRequest()
+
+    start_of_month = pytz.utc.localize(datetime(year, month, 1))
+
+    if month == 12:
+        start_of_next_month = pytz.utc.localize(datetime(year + 1, 1, 1))
+    else:
+        start_of_next_month = pytz.utc.localize(datetime(year, month + 1, 1))
+
+
+    wateredOnDays = WateredEvent.objects.annotate(
+        day=ExtractDay("watered_on")
+    ).filter(
+        watered_on__gte=start_of_month,
+        watered_on__lt=start_of_next_month
+    ).values_list('day', flat=True)
+
+    return JsonResponse({'wateredOnDays': sorted(set(wateredOnDays))})

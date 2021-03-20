@@ -40,8 +40,9 @@ module.exports = {
         use: [babelLoader, tsLoader]
       },
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.s?[ac]ss$/i,
         use: [
+          'css-modules-typescript-loader',
           'style-loader',
           'css-loader',
           'sass-loader',

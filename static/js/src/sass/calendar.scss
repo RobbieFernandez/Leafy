@@ -1,0 +1,22 @@
+div.water-calendar-wrapper {
+    background: white;
+
+    div.DayPicker {
+        display: block;
+    }
+
+    div.DayPicker-Week {
+        padding: 0;
+        margin: 0;
+
+        div.DayPicker-Day {
+            padding: 0.2em;
+            margin: 0;
+
+            div {
+                padding: 0.5em;
+                border-radius: 100%;
+            }
+        }
+    }
+}

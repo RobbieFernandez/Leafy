@@ -13,4 +13,5 @@ urlpatterns = [
     path('api/v1/plant-create', api_views.create_plant, name='plant-create'),
     path('api/v1/plant-update/<int:plant_id>', api_views.update_plant, name='plant-update'),
     path('api/v1/plant-delete/<int:plant_id>', api_views.delete_plant, name='plant-delete'),
+    path('api/v1/plant-watered-days/<int:plant_id>', api_views.plant_watered_days, name='plant-watered-days'),
 ]
