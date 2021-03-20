@@ -121,11 +121,15 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
       });
   }
 
+  deletePlant = async () => {
+    this.setState({isDeleting: true});
+    await this.props.onDelete(this.props.plantId!);
+    this.setState({isDeleting: false});
+  }
+
   confirmDelete = () => {
     if (confirm("Are you sure you want to delete this plant?")) {
-      this.setState({isDeleting: true});
-      this.props.onDelete(this.props.plantId!);
-      this.setState({isDeleting: false});
+      this.deletePlant()
     }
   }
 
