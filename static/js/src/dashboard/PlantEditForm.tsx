@@ -18,6 +18,7 @@ interface plantFormState {
   warningThreshold: number;
   dangerThreshold: number;
   isSubmitting: boolean;
+  isDeleting: boolean;
 }
 
 interface plantResponse {
@@ -37,6 +38,7 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
       warningThreshold: 0,
       dangerThreshold: 0,
       isSubmitting: false,
+      isDeleting: false
     }
   }
 
@@ -121,8 +123,18 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
 
   confirmDelete = () => {
     if (confirm("Are you sure you want to delete this plant?")) {
+      this.setState({isDeleting: true});
       this.props.onDelete(this.props.plantId!);
+      this.setState({isDeleting: false});
     }
+  }
+
+  formIsValid = () => {
+    return (
+      this.state.name !== "" &&
+      this.state.warningThreshold > 0 &&
+      this.state.dangerThreshold >= this.state.warningThreshold
+    )
   }
 
   render = () => <div>
@@ -149,13 +161,14 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
           onChange={event => this.setWarningThreshold(parseInt(event.target.value))}
         />
       </div>
-      <div className={this.addLoadingClass("control is-expanded")}>
+      <div className={"control is-expanded"}>
         <input
           className="slider is-warning is-fullwidth"
           type="range"
           step="1"
           min="1"
           max="30"
+          disabled={this.state.isLoading}
           value={this.state.warningThreshold}
           onChange={event => this.setWarningThreshold(parseInt(event.target.value))}
         />
@@ -173,7 +186,7 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
           onChange={event => this.setDangerThreshold(parseInt(event.target.value))}
         />
       </div>
-      <div className={this.addLoadingClass("control is-expanded")}>
+      <div className={"control is-expanded"}>
         <input
           className="slider is-danger is-fullwidth"
           type="range"
@@ -181,6 +194,7 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
           min="1"
           max="30"
           value={this.state.dangerThreshold}
+          disabled={this.state.isLoading}
           onChange={event => this.setDangerThreshold(parseInt(event.target.value))}
         />
       </div>
@@ -188,20 +202,21 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
     <div className="field is-grouped is-grouped-centered">
       <div className="control">
         <button
-          disabled={this.state.name === "" || this.state.warningThreshold === 0 || this.state.dangerThreshold === 0}
+          disabled={this.state.isLoading || !this.formIsValid()}
           className={"button is-link " + (this.state.isSubmitting ? " is-loading" : "")}
           onClick={() => this.submitForm()}
         >
           Submit
-                </button>
+        </button>
       </div>
       {this.props.allowDelete && this.props.plantId !== null && <div className="control">
         <button
-          className={"button is-danger"}
+          disabled={this.state.isLoading}
+          className={"button is-danger" + (this.state.isDeleting ? " is-loading" : "")}
           onClick={this.confirmDelete}
         >
           Delete
-                </button>
+        </button>
       </div>}
     </div>
   </div>
