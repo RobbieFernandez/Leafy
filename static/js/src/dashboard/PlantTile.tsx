@@ -7,8 +7,8 @@ interface plantTileProps {
   waterUrl: string;
   onPlantWatered: ((id: number) => any) | null;
   onEdit: ((id: number) => any) | null;
-  greenTagThreshold: number;
-  yellowTagThreshold: number;
+  warningThreshold: number;
+  dangerThreshold: number;
   plantName: string;
 }
 
@@ -22,8 +22,6 @@ declare const csrftoken: string;
 export default class PlantTile extends React.Component<plantTileProps, plantTileState> {
   static defaultProps = {
     onPlantWatered: null,
-    greenTagThreshold: 3,
-    yellowTagThreshold: 10
   }
 
   constructor(props) {
@@ -75,9 +73,9 @@ export default class PlantTile extends React.Component<plantTileProps, plantTile
   }
 
   getWateredTagDangerLevel = (daysSinceLastWatered) => {
-    if (daysSinceLastWatered < this.props.greenTagThreshold) {
+    if (daysSinceLastWatered < this.props.warningThreshold) {
       return "is-primary";
-    } else if (daysSinceLastWatered < this.props.yellowTagThreshold) {
+    } else if (daysSinceLastWatered < this.props.dangerThreshold) {
       return "is-warning";
     }
     return "is-danger";

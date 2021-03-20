@@ -22,7 +22,13 @@ interface dashboardProps {
 }
 
 interface getPlantsResponse {
-  plants: { id: number; name: string; last_watered: string; }[]
+  plants: {
+    id: number;
+    name: string;
+    last_watered: string;
+    warning_threshold: number;
+    danger_threshold: number
+  }[]
 }
 
 declare const Urls: any;
@@ -52,7 +58,9 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
         const parsedPlants: Plant[] = data.plants.map(p => ({
           name: p.name,
           id: p.id,
-          lastWatered: new Date(Date.parse(p.last_watered)).setHours(0, 0, 0, 0)
+          lastWatered: new Date(Date.parse(p.last_watered)).setHours(0, 0, 0, 0),
+          warningThreshold: p.warning_threshold,
+          dangerThreshold: p.danger_threshold,
         }));
         this.setState({ plants: parsedPlants, loadingPlants: false });
       } else {
@@ -166,6 +174,8 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
                 lastWatered={plant.lastWatered}
                 onPlantWatered={this.onPlantWatered}
                 onEdit={this.editPlant}
+                warningThreshold={plant.warningThreshold}
+                dangerThreshold={plant.dangerThreshold}
               />
             </div>
           )}

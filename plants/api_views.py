@@ -25,7 +25,7 @@ def get_plants(request):
         )
     ).filter(
         owner=request.user
-    ).values('name', 'id', 'last_watered')
+    ).values('name', 'id', 'last_watered', 'warning_threshold', 'danger_threshold')
 
     def format_row(plant_row):
         return update_in(
