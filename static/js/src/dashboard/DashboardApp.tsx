@@ -179,12 +179,12 @@ export default class DashboardApp extends React.Component<dashboardProps, dashbo
               />
             </div>
           )}
-          <div className="column is-one-quarter" key={"add-plant"}>
-            <AddPlantTile
-              onClick={() => this.setState({ creatingPlant: true })}
-            />
-          </div>
         </CSSTransitionGroup>
+        <div className="column is-one-quarter">
+          <AddPlantTile
+            onClick={() => this.setState({ creatingPlant: true })}
+          />
+        </div>
       </div>
     </div>
     {this.state.loadingPlants && <LoadingOverlay />}
