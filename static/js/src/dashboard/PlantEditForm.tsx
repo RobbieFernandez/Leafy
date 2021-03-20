@@ -1,4 +1,5 @@
 import React from 'react';
+import TooltipLabel from "../forms/TooltipLabel";
 
 interface plantFormOptionalProps {
   allowDelete: boolean;
@@ -122,9 +123,9 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
   }
 
   deletePlant = async () => {
-    this.setState({isDeleting: true});
+    this.setState({ isDeleting: true });
     await this.props.onDelete(this.props.plantId!);
-    this.setState({isDeleting: false});
+    this.setState({ isDeleting: false });
   }
 
   confirmDelete = () => {
@@ -153,7 +154,10 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
         />
       </div>
     </div>
-    <label className="label">Warning Threshold:</label>
+    <TooltipLabel
+      label={"Warning Threshold:"}
+      tooltipText={"The plant will enter a 'warning' state after not being watered for this many days."}
+    />
     <div className="field is-grouped">
       <div className={this.addLoadingClass("control")}>
         <input
@@ -178,7 +182,10 @@ export default class PlantEditForm extends React.Component<plantFormProps, plant
         />
       </div>
     </div>
-    <label className="label">Danger Threshold:</label>
+    <TooltipLabel
+      label={"Danger Threshold:"}
+      tooltipText={"The plant will enter a 'danger' state after not being watered for this many days."}
+    />
     <div className="field is-grouped">
       <div className={this.addLoadingClass("control")}>
         <input
