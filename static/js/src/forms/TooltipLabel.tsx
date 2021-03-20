@@ -5,7 +5,7 @@ interface TooltipLabelProps {
     tooltipText: string;
 }
 
-const Tooltip = (props: TooltipLabelProps) => <div className="tooltip-label-wrapper">
+const TooltipLabel = (props: TooltipLabelProps) => <div className="tooltip-label-wrapper">
     <label className="label">{props.label}</label>
     <div className='tooltip-icon-wrapper'>
         <i className="fas fa-info-circle info tooltip-icon"></i>
@@ -15,4 +15,4 @@ const Tooltip = (props: TooltipLabelProps) => <div className="tooltip-label-wrap
     </div>
 </div>
 
-export default Tooltip;
+export default TooltipLabel;
