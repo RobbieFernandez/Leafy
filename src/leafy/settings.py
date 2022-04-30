@@ -11,21 +11,24 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
 import os
-import dj_database_url
+
+env = environ.Env(
+    ALLOWED_HOSTS=(list, ['localhost'])
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = ["leafy-app.herokuapp.com"]
+ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 LOGOUT_REDIRECT_URL = 'plant-dashbaord'
 LOGIN_URL = 'login'
@@ -82,7 +85,7 @@ WSGI_APPLICATION = 'leafy.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=500)
+    'default': env.db()
 }
 
 
