@@ -10,5 +10,6 @@
 cd /var/lib/leafy/src/ && \
     exec /var/lib/leafy/vp/bin/gunicorn \
         -c /var/lib/leafy/config/gunicorn.conf.py \
+        --worker-tmp-dir ${TMPDIR:-/tmp} \
         leafy.wsgi:application
 
